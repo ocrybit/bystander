@@ -1,0 +1,44 @@
+<!DOCTYPE html>  <html> <head>   <title>bystander.bin.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="bystander.bin.html">                 bystander.bin.coffee               </a>                                           <a class="source" href="bystander.html">                 bystander.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               bystander.bin.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="c1">#!/usr/bin/env coffee</span>
+
+<span class="nv">program = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;commander&#39;</span><span class="p">)</span>
+
+<span class="nv">Bystander = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;../lib/bystander&#39;</span><span class="p">)</span>
+
+<span class="nx">program</span>
+  <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s">&#39;-c, --config &lt;path&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;a path to a configuration file&#39;</span><span class="p">,</span> <span class="s">&#39;.bystander&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s">&#39;-i, --ignore &lt;patterns&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;comma separated ignore patterns (glob)&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s">&#39;-p, --plugins &lt;plugin names&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;comma separated plugin names to use&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s">&#39;--nolog&#39;</span><span class="p">,</span> <span class="s">&#39;no stdout log messages&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s">&#39;-b --by &lt;json string&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;hard code json formatted options for a quick hack&#39;</span><span class="p">)</span>
+
+<span class="nx">program</span>
+  <span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">)</span>
+
+<span class="nv">dir = </span><span class="nx">program</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">?</span> <span class="s">&#39;./&#39;</span>
+<span class="nv">configFile = </span><span class="nx">program</span><span class="p">.</span><span class="nx">config</span>
+<span class="nv">ignorePatterns = </span><span class="nx">program</span><span class="p">.</span><span class="nx">ignore</span><span class="o">?</span><span class="p">.</span><span class="nx">split</span><span class="o">?</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="p">[]</span>
+<span class="nv">plugins = </span><span class="nx">program</span><span class="p">.</span><span class="nx">plugins</span><span class="o">?</span><span class="p">.</span><span class="nx">split</span><span class="o">?</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="p">[]</span>
+<span class="nv">nolog = </span><span class="nx">program</span><span class="p">.</span><span class="nx">nolog</span> <span class="o">?</span> <span class="kc">false</span>
+
+<span class="k">if</span> <span class="nx">program</span><span class="p">.</span><span class="k">by</span><span class="o">?</span>
+  <span class="k">try</span>
+    <span class="nv">b = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">@opts</span><span class="p">.</span><span class="k">by</span><span class="p">)</span>
+    <span class="nx">unless</span> <span class="nx">@opts</span><span class="p">.</span><span class="k">by</span><span class="o">?</span> <span class="o">and</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">@opts</span><span class="p">.</span><span class="k">by</span><span class="p">)</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span> <span class="nx">util</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">@opts</span><span class="p">.</span><span class="k">by</span><span class="p">)</span> <span class="o">is</span> <span class="kc">false</span>
+      <span class="nv">b = </span><span class="p">{}</span>
+  <span class="k">catch</span> <span class="nx">e</span>
+    <span class="nv">b = </span><span class="p">{}</span>
+
+<span class="nv">bystander = </span><span class="k">new</span> <span class="nx">Bystander</span><span class="p">(</span>
+  <span class="nx">dir</span><span class="p">,</span>
+  <span class="p">{</span>
+    <span class="nv">configFile: </span><span class="nx">configFile</span><span class="p">,</span>
+    <span class="nv">ignorePatterns: </span><span class="nx">ignorePatterns</span><span class="p">,</span>
+    <span class="nv">nolog: </span><span class="nx">nolog</span><span class="p">,</span>
+    <span class="nv">plugins: </span><span class="nx">plugins</span><span class="p">,</span>
+    <span class="k">by</span> <span class="o">:</span> <span class="nx">b</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="nx">bystander</span><span class="p">.</span><span class="nx">run</span><span class="p">()</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

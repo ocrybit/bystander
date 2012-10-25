@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+(function() {
+  var Bystander, b, bystander, configFile, dir, ignorePatterns, nolog, plugins, program, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+
+  program = require('commander');
+
+  Bystander = require('../lib/bystander');
+
+  program.option('-c, --config <path>', 'a path to a configuration file', '.bystander').option('-i, --ignore <patterns>', 'comma separated ignore patterns (glob)').option('-p, --plugins <plugin names>', 'comma separated plugin names to use').option('--nolog', 'no stdout log messages').option('-b --by <json string>', 'hard code json formatted options for a quick hack');
+
+  program.parse(process.argv);
+
+  dir = (_ref = program.args[0]) != null ? _ref : './';
+
+  configFile = program.config;
+
+  ignorePatterns = (_ref1 = (_ref2 = program.ignore) != null ? typeof _ref2.split === "function" ? _ref2.split(',') : void 0 : void 0) != null ? _ref1 : [];
+
+  plugins = (_ref3 = (_ref4 = program.plugins) != null ? typeof _ref4.split === "function" ? _ref4.split(',') : void 0 : void 0) != null ? _ref3 : [];
+
+  nolog = (_ref5 = program.nolog) != null ? _ref5 : false;
+
+  if (program.by != null) {
+    try {
+      b = JSON.parse(this.opts.by);
+      if (!((this.opts.by != null) && typeof this.opts.by === 'object' && util.isArray(this.opts.by) === false)) {
+        b = {};
+      }
+    } catch (e) {
+      b = {};
+    }
+  }
+
+  bystander = new Bystander(dir, {
+    configFile: configFile,
+    ignorePatterns: ignorePatterns,
+    nolog: nolog,
+    plugins: plugins,
+    by: b
+  });
+
+  bystander.run();
+
+}).call(this);

@@ -103,7 +103,11 @@ module.exports = class Bystander extends FSWatchr
       for v, i in @opts.plugins
         try
           r = require(v)
-          @by[path.basename(v).replace(/^by-/i,'')] = new r(@opts)
+          pname = path.basename(v).replace(/^by-/i,'')
+          options = @opts.by?[pname] ? {}
+          options.nolog = @opts.nolog
+          options.root = @opts.root
+          @by[pname] = new r(options)
         catch e
           console.log("ERROR! - #{v} plugin not found!".red + '\n')
           @emit('plugin error', v, "#{v} plugin not found!")
@@ -157,7 +161,7 @@ module.exports = class Bystander extends FSWatchr
     return @ignoreFiles
 
   # #### Run CoffeeStand
-  run: ->
+  run: (nowatch) ->
     @_readConfigFile(@configFile, =>
       @_requirePlugins()
       @_init(() =>
@@ -166,6 +170,7 @@ module.exports = class Bystander extends FSWatchr
         @setFilter((dir, path)=>
           return @_isIgnore(dir)
         )
-        @watch()
+        unless nowatch
+          @watch()
       )
     )

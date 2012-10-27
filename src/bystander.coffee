@@ -170,6 +170,7 @@ module.exports = class Bystander extends FSWatchr
         @setFilter((dir, path)=>
           return @_isIgnore(dir)
         )
+        @emit('beforewatch')
         unless nowatch
           @watch()
       )

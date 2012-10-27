@@ -1,6 +1,6 @@
 {
   "name" : "bystander",
-  "version" : "0.0.2",
+  "version" : "0.0.3",
   "description" : "The ultimate development automation tool.",
   "keywords" : ["automation", "watcher", "development", "recursive"],
   "bugs" : {"url" : "https://github.com/tomoio/bystander/issues"},

@@ -97,6 +97,7 @@ and automates every aspect of a development cycle.</li>
         <span class="nx">@_setListeners</span><span class="p">()</span></pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>Then get .csmapper</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">@setFilter</span><span class="p">((</span><span class="nx">dir</span><span class="p">,</span> <span class="nx">path</span><span class="p">)</span><span class="o">=&gt;</span>
           <span class="k">return</span> <span class="nx">@_isIgnore</span><span class="p">(</span><span class="nx">dir</span><span class="p">)</span>
         <span class="p">)</span>
+        <span class="nx">@emit</span><span class="p">(</span><span class="s">&#39;beforewatch&#39;</span><span class="p">)</span>
         <span class="nx">unless</span> <span class="nx">nowatch</span>
           <span class="nx">@watch</span><span class="p">()</span>
       <span class="p">)</span>

@@ -135,7 +135,7 @@ see [annotated sorce code](http://tomoio.github.com/bystander/docs/bystander.htm
 Running Tests
 -------------
 
-Run tests with [mocha](http://visionmedia.github.com/mocha/)
+Run tests with [mocha](http://mochajs.org/)
 
     make
 	
